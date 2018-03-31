@@ -1,0 +1,6 @@
+* Class 0
+ab ak bc ca mb
+* Class 1
+al az
+* Class 2
+ar nb
