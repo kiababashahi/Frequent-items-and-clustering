@@ -21,9 +21,13 @@ fpGrowth = FPGrowth(itemsCol="plant", minSupport=float(s), minConfidence=float(c
 model = fpGrowth.fit(df)
 
 # Display frequent itemsets.
-ml=model.freqItemsets
-ml.orderBy([func.size("items"), "freq"], ascending=[0,0]).show(int(n))
+#ml=model.freqItemsets
+#ml.orderBy([func.size("items"), "freq"], ascending=[0,0]).show(int(n))
 
 # Display generated association rules.
-#ml=model.associationRules.show(10)
-#ml.orderBy([func.size("antecedent")],"confidence",ascending=[0,0]).show(int(n))
+ml=model.associationRules
+ml.orderBy([func.size("antecedent"),"confidence"],ascending=[0,0]).show(int(n))
+
+# transform examines the input items against all the association rules and summarize the
+# consequents as prediction
+#model.transform(df).show()
