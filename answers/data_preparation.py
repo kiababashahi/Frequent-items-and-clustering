@@ -5,6 +5,8 @@ from pyspark.sql.functions import monotonically_increasing_id
 from pyspark.sql.types import Row
 from pyspark import SparkContext, SparkConf
 file=sys.argv[1]
+key=sys.argv[2]
+state=sys.argv[3]
 def conv(line):
         elements=line.split(',')
         plant=elements[0]
@@ -18,8 +20,15 @@ def conv(line):
 
 def merge(x, y):
     z = {**x, **y}
+   # print(z['ca'])
     return z
 conf = SparkConf().setAppName('Kia_bigdata_lab').setMaster('local')
 sc = SparkContext(conf=conf)
 spark=SparkSession.builder.appName("lab3").getOrCreate()
-rd=sc.textFile(file).flatMap(conv).reduceByKey(merge).
+rd=sc.textFile(file).flatMap(conv).reduceByKey(merge).filter(lambda x:x[0]==str(state)).collect()
+for i in range(len(rd)):
+    if(key in rd[i][1]):
+        print(rd[i][1][key])
+    else:
+        print('0')
+#
