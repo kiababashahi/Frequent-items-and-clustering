@@ -93,9 +93,12 @@ for i in range(len(state_list)):
     clusters.setdefault(dic_key,[])
     clusters[dic_key].append(state_list[i][0])
     d=[]
+
 for keys in clusters.keys():
-    print(clusters[keys].sort())
-print(k)
+   clusters[keys].sort()
+for keys in clusters.keys():
+    print(clusters[keys])
+
 #print(class2)
 #print(class3)
 
