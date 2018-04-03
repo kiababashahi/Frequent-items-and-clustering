@@ -18,6 +18,7 @@ def conv(line):
         tuples = (elements[i], plant_dict)
         states.append(tuples)
     return states
+
 def merge(x, y):
     z = {**x, **y}
     return z
@@ -27,6 +28,8 @@ def difference(s,c):
     intersect = (s.intersection(c))
     diff=union.difference(intersect)
     return(len(diff))
+
+
 def min_dist(d):
     min_index=-1
     min=math.inf
@@ -40,12 +43,19 @@ def kmeans_dist(s,c):
     #print(s[1].keys())
     #print(c[1].keys())
     dist=0
-    for key in (set(s[1].keys())|set(c[1].keys())):
-        dist+=math.pow(s[1].get(key,0)-c[1].get(key,0),2)
+    #print(type(s))
+    #print(type(c[0]))
+    for key in (set(s[1].keys()) | set(c[0].keys())):
+        dist+=math.pow(s[1].get(key,0)-c[0].get(key,0),2)
     return dist
 
+def find_avg(states):
+    c={}
+    for i in range(len(states)):
+        for keys in (states[i][1].keys()):
+            c.update({keys:c.get(keys,0)+states[i][1][keys]/len(states)})
 
-
+    return c
 
 all_states = [ "ab", "ak", "ar", "az", "ca", "co", "ct", "de", "dc", "fl",
            "ga", "hi", "id", "il", "in", "ia", "ks", "ky", "la", "me", "md",
@@ -75,47 +85,72 @@ while(number<int(k)):
     temp=rd.filter(lambda x:x[0]==str(centroids[number])).map(lambda x:x[1]).collect()
     c.append(temp)
     number+=1
-set_C=[]
 
-'''
-for i in range(int(k)):
-    clusters.append(i)
-classes.fromkeys()
 
-'''
-for i in range(int(k)):
-    set_C.append(set(c[i][0].keys()))
+
+
 state_list=rd.collect()
 #print(len(state_list))
 d=[]
 store=0
 clusters={}
 for i in range(len(state_list)):
-    sa = set(state_list[i][1].keys())
     for j in range(int(k)):
-        d.append(difference(sa,set_C[j]))
+        #print("here is before " + str(type(c[j])))
+        d.append(kmeans_dist(state_list[i],c[j]))
     dic_key=min_dist(d)
     #print(dic_key)
     clusters.setdefault(dic_key,[])
-    clusters[dic_key].append(state_list[i][0])
+    clusters[dic_key].append(state_list[i])
     d=[]
 
-for keys in clusters.keys():
-   clusters[keys].sort()
 
-representations={}
-for i in range(len(clusters)):
-    representations.setdefault(clusters[i][0], clusters[i])
-for key in sorted(representations):
-    print(representations[key])
+new_clu=[]
+old_clu=[]
 
-#print(difference(set(state_list[1][1].keys()),set(state_list[2][1].keys())))
-print(kmeans_dist(state_list[1],state_list[2]))
+file=open("test.txt","w", encoding="utf-8")
+old_sig=str(new_clu)
+new_sig=str(new_clu)
+count=0
+for keys in clusters:
+    for element in range(len(clusters[keys])):
+        file.write(str(clusters[keys][element][0])+ " ")
+    file.write("\n")
 
-'''
-sa=set(s1[0].keys())
-sb=set(s2[0].keys())
-union=sa.union(sb)
-intersect=(sa.intersection(sb))
-dif=union.difference(intersect)
-print(len(dif))'''
+while(True and count<10):
+    for key in clusters.keys():
+        for element in range(len(clusters[key])):
+            old_clu.append(clusters[key][element][0])
+    old_sig = str(old_clu)
+    for keys in clusters:
+        #c=[]
+        c[keys]=[]
+        c[keys]=[find_avg(clusters[keys])]
+    clusters = {}
+    for i in range(len(state_list)):
+        for j in range(int(k)):
+            #print(type(c[j]))
+            d.append(kmeans_dist(state_list[i],c[j]))
+        dic_key=min_dist(d)
+        #print(dic_key)
+        clusters.setdefault(dic_key,[])
+        clusters[dic_key].append(state_list[i])
+        d=[]
+    for key in clusters.keys():
+        for element in range(len(clusters[key])):
+            new_clu.append(clusters[key][element][0])
+    new_sig=str(new_clu)
+    count+=1
+    if(new_sig==old_sig):
+        break
+file.write("++++++++++++++++++++")
+file.write("\n")
+for keys in clusters:
+    for element in range(len(clusters[keys])):
+        file.write(str(clusters[keys][element][0]) + " ")
+    file.write("\n")
+file.close()
+
+
+
+
