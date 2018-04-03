@@ -96,8 +96,12 @@ for i in range(len(state_list)):
 
 for keys in clusters.keys():
    clusters[keys].sort()
-for keys in clusters.keys():
-    print(clusters[keys])
+
+representations={}
+for i in range(len(clusters)):
+    representations.setdefault(clusters[i][0], clusters[i])
+for key in sorted(representations):
+    print(representations[key])
 
 #print(class2)
 #print(class3)
