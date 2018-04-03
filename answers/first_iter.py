@@ -1,5 +1,7 @@
 from pyspark.sql import SparkSession
+#####use arrays for classes
 import sys
+import math
 import csv
 from pyspark.sql.functions import monotonically_increasing_id
 from pyspark.sql.types import Row
@@ -25,20 +27,15 @@ def difference(s,c):
     intersect = (s.intersection(c))
     diff=union.difference(intersect)
     return(len(diff))
-def min_dist(c1,c2,c3):
-    min=[]
-    if(c1<c2):
-        min.append(c1)
-        min.append(1)
-    else:
-        min.append(c2)
-        min.append(2)
-    if(min[0]<c3):
-        return min[1]
-    else:
-        min[0]=c3
-        min[1]=3
-        return min[1]
+def min_dist(d):
+    min_index=-1
+    min=math.inf
+    for i in range(len(d)):
+        if(d[i]<min):
+            min=d[i]
+            min_index=i
+    return min_index
+
 
 
 
@@ -57,51 +54,51 @@ k=sys.argv[2]
 seed=sys.argv[3]
 random.seed(int(seed))
 centroids=[]
+
 for i in range(int(k)):
     centroids.append(all_states[random.randint(0,len(all_states))])
 
 conf = SparkConf().setAppName('Kia_bigdata_lab').setMaster('local')
 sc = SparkContext(conf=conf)
-class1=[]
-class2=[]
-class3=[]
 spark=SparkSession.builder.appName("lab3").getOrCreate()
 rd=sc.textFile(file).flatMap(conv).reduceByKey(merge)
-c1=rd.filter(lambda x:x[0]==str(centroids[0])).map(lambda x:x[1]).collect()
-c2=rd.filter(lambda x:x[0]==str(centroids[1])).map(lambda x:x[1]).collect()
-c3=rd.filter(lambda x:x[0]==str(centroids[2])).map(lambda x:x[1]).collect()
-set_C1=set(c1[0].keys())
-set_C2=set(c2[0].keys())
-set_C3=set(c3[0].keys())
+number=0
+c=[]
+
+while(number<int(k)):
+    temp=rd.filter(lambda x:x[0]==str(centroids[number])).map(lambda x:x[1]).collect()
+    c.append(temp)
+    number+=1
+set_C=[]
+
+'''
+for i in range(int(k)):
+    clusters.append(i)
+classes.fromkeys()
+
+'''
+for i in range(int(k)):
+    set_C.append(set(c[i][0].keys()))
 state_list=rd.collect()
+#print(len(state_list))
+d=[]
+store=0
+clusters={}
 for i in range(len(state_list)):
-    sa=set(state_list[i][1].keys())
-    d1=difference(sa,set_C1)
-    d2=difference(sa,set_C2)
-    d3=difference(sa,set_C3)
-#print(d1)
-#print(d2)
-#print(d3)
-    distance=min_dist(d1,d2,d3)
-    if(distance==1):
-        class1.append(state_list[i][0])
-    else :
-        if(distance==2):
-            class2.append(state_list[i][0])
-        else:
-            class3.append(state_list[i][0])
-class1.sort()
-class2.sort()
-class3.sort()
-#print(class1)
+    sa = set(state_list[i][1].keys())
+    for j in range(int(k)):
+        d.append(difference(sa,set_C[j]))
+    dic_key=min_dist(d)
+    #print(dic_key)
+    clusters.setdefault(dic_key,[])
+    clusters[dic_key].append(state_list[i][0])
+    d=[]
+for keys in clusters.keys():
+    print(clusters[keys].sort())
+print(k)
 #print(class2)
 #print(class3)
-dic={class1[0]:class1,class2[0]:class2,class3[0]:class3}
-i=0
-for key in sorted(dic):
-    print("* Class "+ str(i))
-    print(dic[key])
-    i+=1
+
 '''
 sa=set(s1[0].keys())
 sb=set(s2[0].keys())
