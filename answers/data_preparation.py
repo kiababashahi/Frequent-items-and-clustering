@@ -20,7 +20,6 @@ def conv(line):
 
 def merge(x, y):
     z = {**x, **y}
-   # print(z['ca'])
     return z
 conf = SparkConf().setAppName('Kia_bigdata_lab').setMaster('local')
 sc = SparkContext(conf=conf)
