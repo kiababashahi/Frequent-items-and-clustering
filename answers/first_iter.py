@@ -67,7 +67,7 @@ centroids=random.sample(all_states, int(k))
 conf = SparkConf().setAppName('Kia_bigdata_lab').setMaster('local')
 sc = SparkContext(conf=conf)
 spark=SparkSession.builder.appName("lab3").getOrCreate()
-rd=sc.textFile(file).flatMap(conv).reduceByKey(merge)
+rd=sc.textFile(file).flatMap(conv).reduceByKey(merge).filter(lambda x:x[0] in all_states)
 number=0
 c=[]
 
