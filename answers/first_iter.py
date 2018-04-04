@@ -104,9 +104,12 @@ for keys in clusters.keys():
    clusters[keys].sort()
 
 representations={}
+count=0
 for i in range(len(clusters)):
     representations.setdefault(clusters[i][0], clusters[i])
+
 for key in sorted(representations):
+    print("* Class" + str(count))
     print(representations[key])
 
 #print(difference(set(state_list[1][1].keys()),set(state_list[2][1].keys())))
