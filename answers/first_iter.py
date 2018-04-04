@@ -114,6 +114,7 @@ for key in sorted(representations):
     for element in representations[key]:
         text+=str(element+" ")
     print(text)
+    count+=1
 
 
 #print(difference(set(state_list[1][1].keys()),set(state_list[2][1].keys())))
