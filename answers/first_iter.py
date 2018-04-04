@@ -109,16 +109,13 @@ for i in range(len(clusters)):
     representations.setdefault(clusters[i][0], clusters[i])
 
 for key in sorted(representations):
-    print("* Class" + str(count))
-    print(representations[key])
+    print("* Class " + str(count))
+    text=""
+    for element in representations[key]:
+        text+=str(element+" ")
+    print(text)
+
 
 #print(difference(set(state_list[1][1].keys()),set(state_list[2][1].keys())))
-print(kmeans_dist(state_list[1],state_list[2]))
 
-'''
-sa=set(s1[0].keys())
-sb=set(s2[0].keys())
-union=sa.union(sb)
-intersect=(sa.intersection(sb))
-dif=union.difference(intersect)
-print(len(dif))'''
+
