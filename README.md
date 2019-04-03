@@ -1,32 +1,17 @@
-# Assignment instructions
+# Frequent items and clustering 
 
 ## Preliminaries
 
-With this assignment you will get a practical hands-on of frequent
-itemsets and clustering algorithms in Spark. Before starting, you may
-want to review the following definitions and algorithms:
+Before starting, you may want to review the following definitions and algorithms:
 1. Market-basket model, association rules, confidence, interest.
 2. kmeans clustering algorithm and its Spark implementation.
 
 Important preliminary notes:
 
-* The requested tasks, described below, are all evaluated with a test
-  run with [pytest](http://pytest.org). Your assignment will be graded
-  directly from the result of those tests, see details
-  [here](./README.md). You may want to get familiar with pytest before
-  you start.
-  
-* The tests contain examples of expected outputs that you may want to
-  check in case the instruction below are unclear. Every detail in
-  your answer counts! In particular, you should pay attention to the
-  exact syntax of the expected output: add quotes around your answer
-  and the tests won't pass!
-
-* Your answers to the tasks below *must* be located in directory `answers`. 
 
 ## Dataset
 
-We will use the dataset at
+I used the dataset at
 https://archive.ics.uci.edu/ml/datasets/Plants, extracted from the
 [USDA plant dataset](https://plants.usda.gov/java). This dataset lists
 the plants found in US and Canadian states.
